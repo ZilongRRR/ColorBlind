@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using ZTools;
 
 public class Block : MonoBehaviour {
-    private Block[] neightborBlocks = new Block[8];
+    private Block[] neightborBlocks = new Block[9];
+    public GameObject tmpblock;
     private bool isClick = false;
     public int colorIndex;
+
+    public int cooord_x = 0;
+    public int cooord_y = 0;
     
     //public BlockFeedback blockFeedback;
     void Start()
@@ -17,7 +22,34 @@ public class Block : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (!isClick)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = MapManager.Instance.cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (this.gameObject == hit.collider.gameObject)
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            if (MapManager.Instance.currCenterBlock.neightborBlocks[i] == this)
+                            {
+                                Color color = gameObject.GetComponent<MeshRenderer>().material.color;
+                                color.a = 0f;
+                                gameObject.GetComponent<MeshRenderer>().material.color = color;
+                                MapManager.Instance.clicked_blocks.Add(new int[] { cooord_x, cooord_y });
+
+                                InitCenter();
+                                this.isClick = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void SetNeightborBlocks(int index, Block block)
@@ -36,16 +68,33 @@ public class Block : MonoBehaviour {
         // 更新 MapManager 的 currCenterBlock 為自己
         // 更新 MapManager 的 currColor
         List<int> null_index = new List<int>();
-        for (int i = 0; i < this.neightborBlocks.Length; i++)
+        GameObject[] _Blocks = GameObject.FindGameObjectsWithTag("Block");
+        foreach(KeyValuePair<int,int[]> item in MapManager.Instance.location_coord)
         {
-            if (this.neightborBlocks[i] == null)
-                null_index.Add(i);
+            bool check = false;
+            foreach (GameObject go in _Blocks)
+            {
+                if (go.GetComponent<Block>().cooord_x == this.cooord_x + item.Value[0] && go.GetComponent<Block>().cooord_y == this.cooord_y + item.Value[1])
+                {
+                    check = true;
+                    this.neightborBlocks[item.Key] = go.GetComponent<Block>();
+                }
+            }
+            if (item.Key != 4 && !check)
+                null_index.Add(item.Key);
         }
+
+        string s = "";
+        foreach (int i in null_index) s += i + " ";
+        //Debug.Log(s);
 
         foreach (int index in null_index)
         {
             var blockIns = GameObject.Instantiate(this);
+            blockIns.gameObject.SetActive(true);
             blockIns.transform.position = this.transform.position + MapManager.Instance.neightborVectors[index];
+            blockIns.cooord_x = this.cooord_x + MapManager.Instance.location_coord[index][0];
+            blockIns.cooord_y = this.cooord_y + MapManager.Instance.location_coord[index][1];
             blockIns.InitColor();
             SetNeightborBlocks(index, blockIns);
         }
@@ -60,14 +109,16 @@ public class Block : MonoBehaviour {
 
         colorIndex = MapManager.Instance.GetRandomColorIndex();
         this.GetComponent<MeshRenderer>().material.color = MapManager.Instance.GetColorByIndex(colorIndex);
-        Debug.Log(colorIndex + "   " + this.GetComponent<MeshRenderer>().material.color.ToString());
     }
-    /*
+    
     private void OnMouseClick()
     {
         // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
-        if (same)
+        this.GetComponent<MeshRenderer>().material.color = Color.red;
+        this.InitCenter();
+
+        /*if (same)
         {
             InitCenter();
             blockFeedback.BecomeCenter();
@@ -75,6 +126,17 @@ public class Block : MonoBehaviour {
         else
         {
             blockFeedback.ClickError();
-        }
-    }*/
+        }*/
+    }
+
+    public static void SetMaterialRenderingModeTransparent(Material material)
+    {
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = 3000;
+    }
 }
