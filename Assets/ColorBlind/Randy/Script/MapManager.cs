@@ -154,7 +154,7 @@ public class MapManager : Singleton<MapManager> {
                 b.GetComponent<MeshRenderer>().material.color = color;
             }
         }
-        camTrans.DOLocalMoveZ(-30f, 1f);
+        camTrans.DOLocalMoveZ((-0.5f)*(allBlocks.Count), 1f);
         camTrans.gameObject.GetComponent<Camera>().orthographic = false;
         text.text = "";
     }
