@@ -5,15 +5,15 @@ using UnityEngine.UI;
 using ZTools;
 
 public class Block : MonoBehaviour {
+    [SerializeField]
     private Block[] neightborBlocks = new Block[9];
-    public GameObject tmpblock;
     private bool isClick = false;
     public int colorIndex;
 
     public int cooord_x = 0;
     public int cooord_y = 0;
 
-    //public BlockFeedback blockFeedback;
+    public BlockFeedback blockFeedback;
     void Start () {
 
     }
@@ -34,10 +34,9 @@ public class Block : MonoBehaviour {
         // 更新 MapManager 的 currCenterBlock 為自己
         // 更新 MapManager 的 currColor
         List<int> null_index = new List<int> ();
-        GameObject[] _Blocks = GameObject.FindGameObjectsWithTag ("Block");
         foreach (KeyValuePair<int, int[]> item in MapManager.Instance.location_coord) {
             bool check = false;
-            foreach (GameObject go in _Blocks) {
+            foreach (GameObject go in MapManager.Instance.allBlocks) {
                 if (go.GetComponent<Block> ().cooord_x == this.cooord_x + item.Value[0] && go.GetComponent<Block> ().cooord_y == this.cooord_y + item.Value[1]) {
                     check = true;
                     this.neightborBlocks[item.Key] = go.GetComponent<Block> ();
@@ -53,16 +52,14 @@ public class Block : MonoBehaviour {
 
         foreach (int index in null_index) {
             var blockIns = GameObject.Instantiate (this);
-            blockIns.gameObject.SetActive (true);
+            MapManager.Instance.allBlocks.Add (blockIns.gameObject);
             blockIns.transform.position = this.transform.position + MapManager.Instance.neightborVectors[index];
             blockIns.cooord_x = this.cooord_x + MapManager.Instance.location_coord[index][0];
             blockIns.cooord_y = this.cooord_y + MapManager.Instance.location_coord[index][1];
             blockIns.InitColor ();
             SetNeightborBlocks (index, blockIns);
         }
-
-        MapManager.Instance.currCenterBlock = this;
-        MapManager.Instance.currColor = this.colorIndex;
+        MapManager.Instance.NextStep (this);
     }
     public void InitColor () {
         // 跟 MapManager 取得隨機顏色的位置
@@ -75,36 +72,28 @@ public class Block : MonoBehaviour {
         // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
         if (!isClick) {
-            for (int i = 0; i < 9; i++) {
-                if (MapManager.Instance.currCenterBlock.neightborBlocks[i] == this) {
-                    Color color = gameObject.GetComponent<MeshRenderer> ().material.color;
-                    color.a = 0f;
-                    gameObject.GetComponent<MeshRenderer> ().material.color = color;
-                    MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
+            // 確認點擊正確
+            if (colorIndex == MapManager.Instance.currColor) {
+                // 點選到正確的動態回饋
+                this.isClick = true;
+                Color color = gameObject.GetComponent<MeshRenderer> ().material.color;
+                color.a = 0f;
+                gameObject.GetComponent<MeshRenderer> ().material.color = color;
+                MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
+                // 判斷周圍是否還有可以點擊的位置
 
-                    InitCenter ();
-                    this.isClick = true;
-                }
+                InitCenter ();
+                // 周圍都沒有可點擊點
+                // otherBlock.InitCenter();
+            } else {
+                // 點擊錯誤的動態
             }
         }
-        /*if (same)
-        {
-            InitCenter();
-            blockFeedback.BecomeCenter();
-        }
-        else
-        {
-            blockFeedback.ClickError();
-        }*/
     }
 
-    public static void SetMaterialRenderingModeTransparent (Material material) {
-        material.SetInt ("_SrcBlend", (int) UnityEngine.Rendering.BlendMode.One);
-        material.SetInt ("_DstBlend", (int) UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        material.SetInt ("_ZWrite", 0);
-        material.DisableKeyword ("_ALPHATEST_ON");
-        material.DisableKeyword ("_ALPHABLEND_ON");
-        material.EnableKeyword ("_ALPHAPREMULTIPLY_ON");
-        material.renderQueue = 3000;
+    public int GetRandomColorIndexFromNeightbor () {
+        // 從周圍的方塊隨機取得一個顏色值
+        // 要確保沒被點擊過
+        return colorIndex;
     }
 }

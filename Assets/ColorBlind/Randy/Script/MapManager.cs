@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using ZTools;
+
 public class MapManager : Singleton<MapManager> {
     // Start is called before the first frame update
-    [SerializeField] public Camera cam;
+    [Header ("鏡頭設定")]
+    public Transform camTrans;
+    public float camTranslateDuration = 0.3f;
+    [Header ("顏色設定")]
     public string[] colorTextArray = new string[] {
         "紅",
         "橙",
@@ -44,60 +49,43 @@ public class MapManager : Singleton<MapManager> {
         { 8, new int[] { 1, -1 } }
     };
     public List<int[]> clicked_blocks = new List<int[]> ();
+    public List<GameObject> allBlocks = new List<GameObject> ();
     // 記錄現在正確的顏色
     public int currColor;
     public int Combo = 0;
+    [Header ("初始方塊設定")]
+    public GameObject blockPrefab;
+    public Vector3 initBlockPosition;
     public Block currCenterBlock;
+    [Header ("UI")]
     public Text text;
     [SerializeField, Header ("方塊間距")]
     private float distance = 2f;
 
     void Start () {
         neightborVectors = new Vector3[9] {
-            new Vector3 (0, currCenterBlock.transform.localScale.x * distance * Mathf.Sqrt (2), 0),
-            new Vector3 (currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), 0),
-            new Vector3 (currCenterBlock.transform.localScale.x * distance * Mathf.Sqrt (2), 0, 0),
-            new Vector3 (-currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), 0),
+            new Vector3 (0, 1 * distance * Mathf.Sqrt (2), 0),
+            new Vector3 (1 * distance / Mathf.Sqrt (2), 1 * distance / Mathf.Sqrt (2), 0),
+            new Vector3 (1 * distance * Mathf.Sqrt (2), 0, 0),
+            new Vector3 (-1 * distance / Mathf.Sqrt (2), 1 * distance / Mathf.Sqrt (2), 0),
             new Vector3 (0, 0, 0),
-            new Vector3 (currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), -currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), 0),
-            new Vector3 (-currCenterBlock.transform.localScale.x * distance * Mathf.Sqrt (2), 0, 0),
-            new Vector3 (-currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), -currCenterBlock.transform.localScale.x * distance / Mathf.Sqrt (2), 0),
-            new Vector3 (0, -currCenterBlock.transform.localScale.x * distance * Mathf.Sqrt (2), 0)
+            new Vector3 (1 * distance / Mathf.Sqrt (2), -1 * distance / Mathf.Sqrt (2), 0),
+            new Vector3 (-1 * distance * Mathf.Sqrt (2), 0, 0),
+            new Vector3 (-1 * distance / Mathf.Sqrt (2), -1 * distance / Mathf.Sqrt (2), 0),
+            new Vector3 (0, -1 * distance * Mathf.Sqrt (2), 0)
         };
         for (int index = 0; index < 9; index++) {
-            var blockIns = GameObject.Instantiate (currCenterBlock);
-            blockIns.transform.position = currCenterBlock.transform.position + neightborVectors[index];
-            blockIns.cooord_x = currCenterBlock.cooord_x + location_coord[index][0];
-            blockIns.cooord_y = currCenterBlock.cooord_y + location_coord[index][1];
+            Block blockIns = GameObject.Instantiate (blockPrefab).GetComponent<Block> ();
+            allBlocks.Add (blockIns.gameObject);
+            blockIns.transform.position = initBlockPosition + neightborVectors[index];
+            blockIns.cooord_x = location_coord[index][0];
+            blockIns.cooord_y = location_coord[index][1];
             blockIns.InitColor ();
-            currCenterBlock.SetNeightborBlocks (index, blockIns);
+            if (index == 4) {
+                currCenterBlock = blockIns;
+            }
         }
         currCenterBlock.InitCenter ();
-        currCenterBlock.gameObject.SetActive (false);
-
-        //create UI Text
-        GameObject canvasGO = new GameObject ();
-        canvasGO.name = "Canvas";
-        canvasGO.AddComponent<Canvas> ();
-        canvasGO.AddComponent<CanvasScaler> ();
-        canvasGO.AddComponent<GraphicRaycaster> ();
-
-        // Get canvas from the GameObject.
-        Canvas canvas;
-        canvas = canvasGO.GetComponent<Canvas> ();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
-        // Create the Text GameObject.
-        GameObject textGO = new GameObject ();
-        textGO.transform.parent = canvasGO.transform;
-        text = textGO.AddComponent<Text> ();
-        text.fontSize = 1;
-        text.alignment = TextAnchor.MiddleCenter;
-    }
-
-    // Update is called once per frame
-    void Update () {
-
     }
 
     public int GetRandomColorIndex () {
@@ -107,6 +95,13 @@ public class MapManager : Singleton<MapManager> {
     public Color GetColorByIndex (int index) {
         return colorArray[index];
     }
+    public void NextStep (Block nextBlock) {
+        currCenterBlock = nextBlock;
+        Vector3 newPos = new Vector3 (nextBlock.transform.position.x, nextBlock.transform.position.y, camTrans.position.z);
+        camTrans.DOMove (newPos, camTranslateDuration);
+        GetText ();
+    }
+
     public string GetRandomColorString () {
         int index = Random.Range (0, colorTextArray.Length);
         return colorTextArray[index];
@@ -114,9 +109,8 @@ public class MapManager : Singleton<MapManager> {
     private void GetText () {
         // 從 currCenterBlock 的相鄰方塊隨機取得 text 的顏色
         // 並且從 GetRandomColorString() 取得文字
-        currColor = Random.Range (0, currCenterBlock.GetNeightborBlocks ().Length);
+        currColor = currCenterBlock.GetRandomColorIndexFromNeightbor ();
         text.text = GetRandomColorString ();
-        text.transform.position = currCenterBlock.transform.position;
         text.color = GetColorByIndex (currColor);
     }
 }
