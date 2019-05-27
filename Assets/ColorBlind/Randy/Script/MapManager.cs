@@ -49,7 +49,8 @@ public class MapManager : Singleton<MapManager> {
     public int Combo = 0;
     public Block currCenterBlock;
     public Text text;
-    private float distance = 1.1f;
+    [SerializeField, Header ("方塊間距")]
+    private float distance = 2f;
 
     void Start () {
         neightborVectors = new Vector3[9] {
