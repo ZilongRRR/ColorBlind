@@ -181,6 +181,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 103.39099, y: -30, z: 0}
+--- !u!114 &319970080 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7696786633966597061, guid: ceb7e4fead8c2364f89e827a5fe5a79c,
+    type: 3}
+  m_PrefabInstance: {fileID: 3038504271047762491}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4130b58b7dc4ef292d0180f7a77268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,9 +340,9 @@ MonoBehaviour:
   neightborVectors: []
   currColor: 0
   Combo: 0
-  currCenterBlock: {fileID: 1267941247}
+  currCenterBlock: {fileID: 319970080}
   text: {fileID: 0}
-  distance: 1.5
+  distance: 1.1
 --- !u!4 &1121155258
 Transform:
   m_ObjectHideFlags: 0
@@ -356,6 +368,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Block Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414150585038474481, guid: 1cbb228d4dfe46149a5b2b598ec8158e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8414150585038311633, guid: 1cbb228d4dfe46149a5b2b598ec8158e,
         type: 3}
@@ -427,7 +444,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267941246}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b4130b58b7dc4ef292d0180f7a77268, type: 3}
   m_Name: 
@@ -446,7 +463,7 @@ PrefabInstance:
     - target: {fileID: 7915289722115789779, guid: ceb7e4fead8c2364f89e827a5fe5a79c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8739867599295391300, guid: ceb7e4fead8c2364f89e827a5fe5a79c,
         type: 3}
@@ -517,7 +534,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 5ec100d3e2d4890489a5d41ef9c8b325, type: 2}
+      objectReference: {fileID: 2100000, guid: 2ffae5517370f4ceda8ccf6e2592bd0c, type: 2}
     - target: {fileID: 2014786085440128981, guid: ceb7e4fead8c2364f89e827a5fe5a79c,
         type: 3}
       propertyPath: m_Enabled
