@@ -46,10 +46,6 @@ public class Block : MonoBehaviour {
                 null_index.Add (item.Key);
         }
 
-        string s = "";
-        foreach (int i in null_index) s += i + " ";
-        //Debug.Log(s);
-
         foreach (int index in null_index) {
             var blockIns = GameObject.Instantiate (this);
             MapManager.Instance.allBlocks.Add (blockIns.gameObject);
@@ -59,6 +55,7 @@ public class Block : MonoBehaviour {
             blockIns.InitColor ();
             SetNeightborBlocks (index, blockIns);
         }
+        
         MapManager.Instance.NextStep (this);
     }
     public void InitColor () {

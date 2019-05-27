@@ -37,7 +37,8 @@ public class MapManager : Singleton<MapManager> {
         new Color (62f / 255f, 58f / 255f, 57f / 255f), new Color (239f / 255f, 239f / 255f, 239f / 255f)
     };
     public Vector3[] neightborVectors;
-    public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> { { 0, new int[] {-1, 1 } },
+    public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> {
+        { 0, new int[] {-1, 1 } },
         { 1, new int[] { 0, 1 } },
         { 2, new int[] { 1, 1 } },
         { 3, new int[] {-1, 0 } },
