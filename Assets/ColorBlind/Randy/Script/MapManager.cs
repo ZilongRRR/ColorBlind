@@ -31,11 +31,10 @@ public class MapManager : Singleton<MapManager> {
     };
     public Color[] colorArray = new Color[] {
         new Color (23f / 255f, 28f / 255f, 97f / 255f), new Color (3f / 255f, 110f / 255f, 184f / 255f),
-        new Color (0f, 162f / 255f, 154f / 255f), new Color (0f, 162f / 255f, 154f / 255f),
-        new Color (34f / 255f, 172f / 255f, 56f / 255f), new Color (218f / 255f, 224f / 255f, 0f),
-        new Color (248f / 255f, 182f / 255f, 45f / 255f), new Color (234f / 255f, 85f / 255f, 20f / 255f),
-        new Color (195f / 255f, 13f / 255f, 35f / 255f), new Color (62f / 255f, 58f / 255f, 57f / 255f),
-        new Color (239f / 255f, 239f / 255f, 239f / 255f)
+        new Color (0f, 162f / 255f, 154f / 255f), new Color (34f / 255f, 172f / 255f, 56f / 255f),
+        new Color (218f / 255f, 224f / 255f, 0f), new Color (248f / 255f, 182f / 255f, 45f / 255f),
+        new Color (234f / 255f, 85f / 255f, 20f / 255f), new Color (195f / 255f, 13f / 255f, 35f / 255f),
+        new Color (62f / 255f, 58f / 255f, 57f / 255f), new Color (239f / 255f, 239f / 255f, 239f / 255f)
     };
     public Vector3[] neightborVectors;
     public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> { { 0, new int[] {-1, 1 } },
@@ -59,10 +58,17 @@ public class MapManager : Singleton<MapManager> {
     public Block currCenterBlock;
     [Header ("UI")]
     public Text text;
+    public Canvas canvas;
+    public Sprite[] images;
+    int spritesIndex = 0;
     [SerializeField, Header ("方塊間距")]
     private float distance = 2f;
 
     void Start () {
+        canvas.GetComponentInChildren<Image>().sprite = images[spritesIndex];
+        this.InvokeRepeating("changeADSprites", 0, 5f);
+
+        initBlockPosition = new Vector3(camTrans.position.x, camTrans.position.y, 0);
         neightborVectors = new Vector3[9] {
             new Vector3 (0, 1 * distance * Mathf.Sqrt (2), 0),
             new Vector3 (1 * distance / Mathf.Sqrt (2), 1 * distance / Mathf.Sqrt (2), 0),
@@ -112,5 +118,13 @@ public class MapManager : Singleton<MapManager> {
         currColor = currCenterBlock.GetRandomColorIndexFromNeightbor ();
         text.text = GetRandomColorString ();
         text.color = GetColorByIndex (currColor);
+    }
+
+    private void changeADSprites()
+    {
+        spritesIndex++;
+        if (spritesIndex == images.Length)
+            spritesIndex = 0;
+        canvas.GetComponentInChildren<Image>().sprite = images[spritesIndex];
     }
 }

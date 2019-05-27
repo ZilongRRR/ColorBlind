@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43811557, g: 0.48610705, b: 0.56638455, a: 1}
+  m_IndirectSpecularColor: {r: 0.44770342, g: 0.49768043, b: 0.57539445, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -323,7 +323,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -357,13 +357,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170076733}
-  m_LocalRotation: {x: 0.75798625, y: -0.1604274, z: 0.20310178, w: 0.59872335}
-  m_LocalPosition: {x: -0.89, y: 2.58, z: 1.54}
+  m_LocalRotation: {x: 0.39927143, y: -0.0494974, z: 0.25404185, w: 0.8795425}
+  m_LocalPosition: {x: -0.89, y: 2.58, z: -4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 103.39099, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 133.323, y: -170.284, z: -143.579}
 --- !u!1 &296800867
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,7 +835,7 @@ MonoBehaviour:
   IsDontDestroyOnLoad: 1
   DebugMode: 0
   IsHideFlags: 0
-  camTrans: {fileID: 0}
+  camTrans: {fileID: 534669905}
   camTranslateDuration: 0.3
   colorTextArray:
   - "\u7D05"
@@ -870,11 +870,18 @@ MonoBehaviour:
   allBlocks: []
   currColor: 0
   Combo: 0
-  blockPrefab: {fileID: 8414150585038474481, guid: 1cbb228d4dfe46149a5b2b598ec8158e,
+  blockPrefab: {fileID: 7915289722115789779, guid: ceb7e4fead8c2364f89e827a5fe5a79c,
     type: 3}
   initBlockPosition: {x: 0, y: 0, z: 0}
   currCenterBlock: {fileID: 0}
   text: {fileID: 324688992}
+  canvas: {fileID: 1061957306}
+  images:
+  - {fileID: 21300000, guid: da8d14f38588444d6a5491a2da31982f, type: 3}
+  - {fileID: 21300000, guid: d91ca3e63693647f8b45350b70b1e5e5, type: 3}
+  - {fileID: 21300000, guid: b7c8d58a1b73644459fea47c9d7d494a, type: 3}
+  - {fileID: 21300000, guid: f379ae14615684559824d3263d6ac66e, type: 3}
+  - {fileID: 21300000, guid: c8e68b4f7e1974ff7a4aebb451a6f806, type: 3}
   distance: 1.1
 --- !u!4 &1121155258
 Transform:

@@ -72,21 +72,52 @@ public class Block : MonoBehaviour {
         // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
         if (!isClick) {
-            // 確認點擊正確
-            if (colorIndex == MapManager.Instance.currColor) {
-                // 點選到正確的動態回饋
-                this.isClick = true;
-                Color color = gameObject.GetComponent<MeshRenderer> ().material.color;
-                color.a = 0f;
-                gameObject.GetComponent<MeshRenderer> ().material.color = color;
-                MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
-                // 判斷周圍是否還有可以點擊的位置
+            foreach(Block b in MapManager.Instance.currCenterBlock.neightborBlocks)
+            {
+                if(b == this && b != MapManager.Instance.currCenterBlock)
+                {
+                    // 確認點擊正確
+                    if (colorIndex == MapManager.Instance.currColor)
+                    {
+                        // 點選到正確的動態回饋
+                        this.isClick = true;
+                        Color color = gameObject.GetComponent<MeshRenderer>().material.color;
+                        color.a = 0f;
+                        gameObject.GetComponent<MeshRenderer>().material.color = color;
+                        MapManager.Instance.clicked_blocks.Add(new int[] { cooord_x, cooord_y });
+                        // 判斷周圍是否還有可以點擊的位置
 
-                InitCenter ();
-                // 周圍都沒有可點擊點
-                // otherBlock.InitCenter();
-            } else {
-                // 點擊錯誤的動態
+                        InitCenter();
+                        // 周圍都沒有可點擊點
+                        int clicked_num = 0;
+                        foreach(Block tmp_b in this.neightborBlocks)
+                        {
+                            if (tmp_b.isClick)
+                                clicked_num++;
+                            else
+                                break;
+                        }
+                        if(clicked_num == 9)
+                        {
+                            foreach(GameObject tmp_go in MapManager.Instance.allBlocks)
+                            {
+                                if(tmp_go.GetComponent<Block>().isClick==false)
+                                {
+                                    tmp_go.GetComponent<Block>().isClick = true;
+                                    Color c = tmp_go.GetComponent<MeshRenderer>().material.color;
+                                    c.a = 0f;
+                                    tmp_go.GetComponent<MeshRenderer>().material.color = c;
+                                    MapManager.Instance.clicked_blocks.Add(new int[] { tmp_go.GetComponent<Block>().cooord_x, tmp_go.GetComponent<Block>().cooord_y });
+                                    tmp_go.GetComponent<Block>().InitCenter();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // 點擊錯誤的動態
+                    }
+                }
             }
         }
     }
@@ -94,6 +125,12 @@ public class Block : MonoBehaviour {
     public int GetRandomColorIndexFromNeightbor () {
         // 從周圍的方塊隨機取得一個顏色值
         // 要確保沒被點擊過
-        return colorIndex;
+        List<int> color_indexes = new List<int>();
+        foreach(Block b in neightborBlocks)
+        {
+            if (b != this && !b.isClick)
+                color_indexes.Add(b.colorIndex);
+        }
+        return color_indexes[Random.Range(0, color_indexes.Count)];
     }
 }
