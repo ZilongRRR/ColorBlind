@@ -128,4 +128,34 @@ public class MapManager : Singleton<MapManager> {
             spritesIndex = 0;
         canvas.GetComponentInChildren<Image>().sprite = images[spritesIndex];
     }
+
+    public void displayPath()
+    {
+        foreach(GameObject b in allBlocks)
+        {
+            bool inPath = false;
+            foreach(int[] array in clicked_blocks)
+            {
+                if(b.GetComponent<Block>().cooord_x == array[0] && b.GetComponent<Block>().cooord_y == array[1])
+                {
+                    inPath = true;
+                }
+            }
+            if(inPath)
+            {
+                Color color = b.GetComponent<MeshRenderer>().material.color;
+                color.a = 1f;
+                b.GetComponent<MeshRenderer>().material.color = color;
+            }
+            else
+            {
+                Color color = b.GetComponent<MeshRenderer>().material.color;
+                color.a = 0f;
+                b.GetComponent<MeshRenderer>().material.color = color;
+            }
+        }
+        camTrans.DOLocalMoveZ(-30f, 1f);
+        camTrans.gameObject.GetComponent<Camera>().orthographic = false;
+        text.text = "";
+    }
 }
