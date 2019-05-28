@@ -4,8 +4,11 @@ using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+using System;
+
 public class FireBaseConnect
 {
+    private List<Rank> rankList = new List<Rank>();
     public FireBaseConnect(string domain_name = "ColorBlind")
     {
         // Set these values before calling into the realtime database.
@@ -14,28 +17,35 @@ public class FireBaseConnect
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         Debug.Log("Connect Finish");
     }
-    public void ReadData()
+    public void ReadData(string[] rank_info_name, string[] rank_info_score)
     {
-        Debug.Log("Start to read");
-        FirebaseDatabase.DefaultInstance
+        var getTask = FirebaseDatabase.DefaultInstance
         .GetReference("user-rank")
+        .OrderByValue()
         .GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.Log("error");
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Child Count");
-                Debug.Log(snapshot.ChildrenCount + "");
-                foreach (var data in snapshot.Children)
-                {
-                    Debug.Log("Raw Json");
-                    Debug.Log(data.GetRawJsonValue());
-                }
-            }
-        });
+         {
+             if (task.IsFaulted)
+             {
+                 Debug.Log("Error loading");
+             }
+             else if (task.IsCompleted)
+             {
+                 DataSnapshot snapshot = task.Result;
+                 Debug.Log(snapshot.ChildrenCount);
+                 int i = 0;
+                 foreach (var ds in snapshot.Children)
+                 {
+                     Debug.Log(ds.Key);
+                     Debug.Log(ds.Value.ToString());
+                     rank_info_name[i] = ds.Key.Clone().ToString();
+                     rank_info_score[i] = (ds.Value).ToString();
+                     i++;
+                 }
+             }
+         });
+    }
+    public void PushData(string user, int score)
+    {
+
     }
 }
