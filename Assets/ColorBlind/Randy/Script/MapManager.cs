@@ -37,8 +37,7 @@ public class MapManager : Singleton<MapManager> {
         new Color (62f / 255f, 58f / 255f, 57f / 255f), new Color (239f / 255f, 239f / 255f, 239f / 255f)
     };
     public Vector3[] neightborVectors;
-    public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> {
-        { 0, new int[] {-1, 1 } },
+    public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> { { 0, new int[] {-1, 1 } },
         { 1, new int[] { 0, 1 } },
         { 2, new int[] { 1, 1 } },
         { 3, new int[] {-1, 0 } },
@@ -49,7 +48,7 @@ public class MapManager : Singleton<MapManager> {
         { 8, new int[] { 1, -1 } }
     };
     public List<int[]> clicked_blocks = new List<int[]> ();
-    public List<GameObject> allBlocks = new List<GameObject> ();
+    public List<Transform> allBlocks = new List<Transform> ();
     // 記錄現在正確的顏色
     public int currColor;
     public int Combo = 0;
@@ -59,17 +58,16 @@ public class MapManager : Singleton<MapManager> {
     public Block currCenterBlock;
     [Header ("UI")]
     public Text text;
-    public Canvas canvas;
-    public Sprite[] images;
-    int spritesIndex = 0;
     [SerializeField, Header ("方塊間距")]
     private float distance = 2f;
+    [Header ("目前全部方塊邊界，計算左下與右上點")]
+    public Vector3 maxPosition;
+    public Vector3 minPosition;
+    public CameraManager cameraManager;
 
     void Start () {
-        canvas.GetComponentInChildren<Image>().sprite = images[spritesIndex];
-        this.InvokeRepeating("changeADSprites", 0, 5f);
 
-        initBlockPosition = new Vector3(camTrans.position.x, camTrans.position.y, 0);
+        initBlockPosition = new Vector3 (camTrans.position.x, camTrans.position.y, 0);
         neightborVectors = new Vector3[9] {
             new Vector3 (0, 1 * distance * Mathf.Sqrt (2), 0),
             new Vector3 (1 * distance / Mathf.Sqrt (2), 1 * distance / Mathf.Sqrt (2), 0),
@@ -83,8 +81,9 @@ public class MapManager : Singleton<MapManager> {
         };
         for (int index = 0; index < 9; index++) {
             Block blockIns = GameObject.Instantiate (blockPrefab).GetComponent<Block> ();
-            allBlocks.Add (blockIns.gameObject);
+
             blockIns.transform.position = initBlockPosition + neightborVectors[index];
+            AddBlock (blockIns.gameObject.transform);
             blockIns.cooord_x = location_coord[index][0];
             blockIns.cooord_y = location_coord[index][1];
             blockIns.InitColor ();
@@ -121,41 +120,34 @@ public class MapManager : Singleton<MapManager> {
         text.color = GetColorByIndex (currColor);
     }
 
-    private void changeADSprites()
-    {
-        spritesIndex++;
-        if (spritesIndex == images.Length)
-            spritesIndex = 0;
-        canvas.GetComponentInChildren<Image>().sprite = images[spritesIndex];
+    public void AddBlock (Transform block) {
+        allBlocks.Add (block);
+        // 更新邊界位置
+        maxPosition.x = Mathf.Max (maxPosition.x, block.position.x);
+        maxPosition.y = Mathf.Max (maxPosition.y, block.position.y);
+        minPosition.x = Mathf.Min (minPosition.x, block.position.x);
+        minPosition.y = Mathf.Min (minPosition.y, block.position.y);
     }
 
-    public void displayPath()
-    {
-        foreach(GameObject b in allBlocks)
-        {
+    public void displayPath () {
+        foreach (Transform b in allBlocks) {
             bool inPath = false;
-            foreach(int[] array in clicked_blocks)
-            {
-                if(b.GetComponent<Block>().cooord_x == array[0] && b.GetComponent<Block>().cooord_y == array[1])
-                {
+            foreach (int[] array in clicked_blocks) {
+                if (b.GetComponent<Block> ().cooord_x == array[0] && b.GetComponent<Block> ().cooord_y == array[1]) {
                     inPath = true;
                 }
             }
-            if(inPath)
-            {
-                Color color = b.GetComponent<MeshRenderer>().material.color;
+            if (inPath) {
+                Color color = b.GetComponent<MeshRenderer> ().material.color;
                 color.a = 1f;
-                b.GetComponent<MeshRenderer>().material.color = color;
-            }
-            else
-            {
-                Color color = b.GetComponent<MeshRenderer>().material.color;
+                b.GetComponent<MeshRenderer> ().material.color = color;
+            } else {
+                Color color = b.GetComponent<MeshRenderer> ().material.color;
                 color.a = 0f;
-                b.GetComponent<MeshRenderer>().material.color = color;
+                b.GetComponent<MeshRenderer> ().material.color = color;
             }
         }
-        camTrans.DOLocalMoveZ((-0.5f)*(allBlocks.Count), 1f);
-        camTrans.gameObject.GetComponent<Camera>().orthographic = false;
+        cameraManager.DoLookAllOffset (maxPosition, minPosition, new Vector2 (1, 0.7f), new Vector2 (1, 1), 0.8f);
         text.text = "";
     }
 }

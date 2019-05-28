@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44770342, g: 0.49768043, b: 0.57539445, a: 1}
+  m_IndirectSpecularColor: {r: 0.44770306, g: 0.4976803, b: 0.57539386, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -176,7 +176,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160293631
 GameObject:
@@ -822,7 +822,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -926,7 +926,7 @@ RectTransform:
   - {fileID: 324688991}
   - {fileID: 308964486}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -943,8 +943,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1121155258}
   - component: {fileID: 1121155257}
+  - component: {fileID: 1121155259}
+  - component: {fileID: 1121155260}
   m_Layer: 0
-  m_Name: MapManager
+  m_Name: '----Game Main----'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -962,7 +964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae51790172be948f783fd674253a8029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDontDestroyOnLoad: 1
+  IsDontDestroyOnLoad: 0
   DebugMode: 0
   IsHideFlags: 0
   camTrans: {fileID: 534669905}
@@ -1004,14 +1006,10 @@ MonoBehaviour:
   initBlockPosition: {x: 0, y: 0, z: 0}
   currCenterBlock: {fileID: 0}
   text: {fileID: 324688992}
-  canvas: {fileID: 1061957306}
-  images:
-  - {fileID: 21300000, guid: da8d14f38588444d6a5491a2da31982f, type: 3}
-  - {fileID: 21300000, guid: d91ca3e63693647f8b45350b70b1e5e5, type: 3}
-  - {fileID: 21300000, guid: b7c8d58a1b73644459fea47c9d7d494a, type: 3}
-  - {fileID: 21300000, guid: f379ae14615684559824d3263d6ac66e, type: 3}
-  - {fileID: 21300000, guid: c8e68b4f7e1974ff7a4aebb451a6f806, type: 3}
   distance: 1.1
+  maxPosition: {x: 0, y: 0, z: 0}
+  minPosition: {x: 0, y: 0, z: 0}
+  cameraManager: {fileID: 1121155260}
 --- !u!4 &1121155258
 Transform:
   m_ObjectHideFlags: 0
@@ -1024,8 +1022,41 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1121155259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121155256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093fbbd04283c794ebe06cddc3693ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  adImage: {fileID: 1381891353}
+  ads:
+  - {fileID: 21300000, guid: da8d14f38588444d6a5491a2da31982f, type: 3}
+  - {fileID: 21300000, guid: d91ca3e63693647f8b45350b70b1e5e5, type: 3}
+  - {fileID: 21300000, guid: b7c8d58a1b73644459fea47c9d7d494a, type: 3}
+  - {fileID: 21300000, guid: f379ae14615684559824d3263d6ac66e, type: 3}
+  - {fileID: 21300000, guid: c8e68b4f7e1974ff7a4aebb451a6f806, type: 3}
+  changeTime: 5
+--- !u!114 &1121155260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121155256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa8996de7fe88747bf4e40e97825a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneCamera: {fileID: 534669904}
 --- !u!1 &1381891351
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,7 +1114,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: f379ae14615684559824d3263d6ac66e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c8e68b4f7e1974ff7a4aebb451a6f806, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
