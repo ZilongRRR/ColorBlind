@@ -1,51 +1,74 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Threading.Tasks;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
-using System;
+using UnityEngine;
 
-public class FireBaseConnect
-{
-    private List<Rank> rankList = new List<Rank>();
-    public FireBaseConnect(string domain_name = "ColorBlind")
-    {
+public class FireBaseConnect {
+    public delegate void FireBaseConnectEvent (List<Rank> rank);
+    public event FireBaseConnectEvent OnReadDataFinish = (e) => { };
+    public event FireBaseConnectEvent OnReadDataFault = (e) => { };
+
+    public List<Rank> rankList = new List<Rank> ();
+    public FireBaseConnect (string domain_name = "ColorBlind") {
         // Set these values before calling into the realtime database.
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://colorblind-86332.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://colorblind-86332.firebaseio.com/");
         // Get the root reference location of the database.
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        Debug.Log("Connect Finish");
+        Debug.Log ("Connect Finish");
     }
-    public void ReadData(string[] rank_info_name, string[] rank_info_score)
-    {
-        var getTask = FirebaseDatabase.DefaultInstance
-        .GetReference("user-rank")
-        .OrderByValue()
-        .GetValueAsync().ContinueWith(task =>
-         {
-             if (task.IsFaulted)
-             {
-                 Debug.Log("Error loading");
-             }
-             else if (task.IsCompleted)
-             {
-                 DataSnapshot snapshot = task.Result;
-                 Debug.Log(snapshot.ChildrenCount);
-                 int i = 0;
-                 foreach (var ds in snapshot.Children)
-                 {
-                     Debug.Log(ds.Key);
-                     Debug.Log(ds.Value.ToString());
-                     rank_info_name[i] = ds.Key.Clone().ToString();
-                     rank_info_score[i] = (ds.Value).ToString();
-                     i++;
-                 }
-             }
-         });
+    public void ReadData () {
+        FirebaseDatabase.DefaultInstance
+            .GetReference ("user-rank")
+            .OrderByValue ().ValueChanged += HandleValueChanged;
+        // .GetValueAsync ().ContinueWith (task => {
+        //     if (task.IsFaulted) {
+        //         Debug.Log ("Error loading");
+        //         if (OnReadDataFault != null) {
+        //             OnReadDataFault (null);
+        //         }
+        //     } else if (task.IsCompleted) {
+        //         DataSnapshot snapshot = task.Result;
+        //         Debug.Log (snapshot.ChildrenCount);
+
+        //         foreach (var ds in snapshot.Children) {
+
+        //             Rank r = new Rank ();
+        //             r.username = ds.Key.Clone ().ToString ();
+        //             r.score = (ds.Value).ToString ().Clone ().ToString ();
+        //             rankList.Add (r);
+        //         }
+        //         // Do Unity stuff
+        //         if (OnReadDataFinish != null) {
+        //             OnReadDataFinish (rankList);
+        //         }
+        //     }
+        // }, TaskScheduler.FromCurrentSynchronizationContext ());
     }
-    public void PushData(string user, int score)
-    {
+    void HandleValueChanged (object sender, ValueChangedEventArgs args) {
+        if (args.DatabaseError != null) {
+            Debug.LogError (args.DatabaseError.Message);
+            return;
+        }
+        // Do something with the data in args.Snapshot
+        DataSnapshot snapshot = args.Snapshot;
+        Debug.Log (snapshot.ChildrenCount);
+
+        foreach (var ds in snapshot.Children) {
+            Rank r = new Rank ();
+            r.username = ds.Key.Clone ().ToString ();
+            r.score = (ds.Value).ToString ().Clone ().ToString ();
+            rankList.Add (r);
+        }
+        // Do Unity stuff
+        if (OnReadDataFinish != null) {
+            OnReadDataFinish (rankList);
+        }
+    }
+    public void PushData (string user, int score) {
 
     }
 }

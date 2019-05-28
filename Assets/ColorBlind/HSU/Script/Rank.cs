@@ -1,15 +1,5 @@
-public class Rank
-{
+[System.Serializable]
+public struct Rank {
     public string username;
-    public int score;
-
-    public Rank()
-    {
-    }
-
-    public Rank(string username, int score)
-    {
-        this.username = username;
-        this.score = score;
-    }
+    public string score;
 }
