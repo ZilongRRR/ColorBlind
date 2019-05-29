@@ -7,23 +7,27 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine;
 
-public class FireBaseConnect {
-    public delegate void FireBaseConnectEvent (List<Rank> rank);
+public class FireBaseConnect
+{
+    public delegate void FireBaseConnectEvent(List<Rank> rank);
     public event FireBaseConnectEvent OnReadDataFinish = (e) => { };
     public event FireBaseConnectEvent OnReadDataFault = (e) => { };
 
-    public List<Rank> rankList = new List<Rank> ();
-    public FireBaseConnect (string domain_name = "ColorBlind") {
+    public List<Rank> rankList = new List<Rank>();
+    private DatabaseReference reference;
+    public FireBaseConnect(string domain_name = "ColorBlind")
+    {
         // Set these values before calling into the realtime database.
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://colorblind-86332.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://colorblind-86332.firebaseio.com/");
         // Get the root reference location of the database.
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        Debug.Log ("Connect Finish");
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+        Debug.Log("Connect Finish");
     }
-    public void ReadData () {
+    public void ReadData()
+    {
         FirebaseDatabase.DefaultInstance
-            .GetReference ("user-rank")
-            .OrderByValue ().ValueChanged += HandleValueChanged;
+            .GetReference("user-rank")
+            .OrderByChild("score").ValueChanged += HandleValueChanged;
         // .GetValueAsync ().ContinueWith (task => {
         //     if (task.IsFaulted) {
         //         Debug.Log ("Error loading");
@@ -48,27 +52,56 @@ public class FireBaseConnect {
         //     }
         // }, TaskScheduler.FromCurrentSynchronizationContext ());
     }
-    void HandleValueChanged (object sender, ValueChangedEventArgs args) {
-        if (args.DatabaseError != null) {
-            Debug.LogError (args.DatabaseError.Message);
+    void HandleValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        rankList = new List<Rank>();
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
             return;
         }
         // Do something with the data in args.Snapshot
         DataSnapshot snapshot = args.Snapshot;
-        Debug.Log (snapshot.ChildrenCount);
+        Debug.Log(snapshot.ChildrenCount);
 
-        foreach (var ds in snapshot.Children) {
-            Rank r = new Rank ();
-            r.username = ds.Key.Clone ().ToString ();
-            r.score = (ds.Value).ToString ().Clone ().ToString ();
-            rankList.Add (r);
+        foreach (var users in snapshot.Children)
+        {
+            Rank r = new Rank();
+            foreach (var user_info in users.Children)
+            {
+                if (user_info.Key.ToString() == "username")
+                    r.username = (user_info.Value).ToString();
+                if (user_info.Key.ToString() == "score")
+                    r.score = (user_info.Value).ToString();
+            }
+            rankList.Add(r);
         }
         // Do Unity stuff
-        if (OnReadDataFinish != null) {
-            OnReadDataFinish (rankList);
+        if (OnReadDataFinish != null)
+        {
+            OnReadDataFinish(rankList);
         }
     }
-    public void PushData (string user, int score) {
+    public string AddScoreToLeaders(string username, long score)
+    {
+        reference.Child("user-rank").RunTransaction(mutableData =>
+        {
+            List<object> leaders = mutableData.Value as List<object>;
 
+            if (leaders == null)
+            {
+                leaders = new List<object>();
+            }
+            // Add the new high score.
+            Dictionary<string, object> newScoreMap =
+                             new Dictionary<string, object>();
+            newScoreMap["score"] = score;
+            newScoreMap["username"] = username;
+            leaders.Add(newScoreMap);
+            mutableData.Value = leaders;
+            return TransactionResult.Success(mutableData);
+        });
+        string id = "";
+        return id;
     }
 }
