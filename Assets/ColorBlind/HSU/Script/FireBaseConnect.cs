@@ -84,24 +84,36 @@ public class FireBaseConnect
     }
     public string AddScoreToLeaders(string username, long score)
     {
-        reference.Child("user-rank").RunTransaction(mutableData =>
-        {
-            List<object> leaders = mutableData.Value as List<object>;
+        // // Update complex data that could be corrupted by concurrent updates.
+        // reference.Child("user-rank").RunTransaction(mutableData =>
+        // {
+        //     List<object> leaders = mutableData.Value as List<object>;
 
-            if (leaders == null)
-            {
-                leaders = new List<object>();
-            }
-            // Add the new high score.
-            Dictionary<string, object> newScoreMap =
-                             new Dictionary<string, object>();
-            newScoreMap["score"] = score;
-            newScoreMap["username"] = username;
-            leaders.Add(newScoreMap);
-            mutableData.Value = leaders;
-            return TransactionResult.Success(mutableData);
-        });
-        string id = "";
-        return id;
+        //     if (leaders == null)
+        //     {
+        //         leaders = new List<object>();
+        //     }
+        //     // Add the new high score.
+        //     Dictionary<string, object> newScoreMap =
+        //                      new Dictionary<string, object>();
+        //     newScoreMap["score"] = score;
+        //     newScoreMap["username"] = username;
+        //     leaders.Add(newScoreMap);
+        //     mutableData.Value = leaders;
+        //     return TransactionResult.Success(mutableData);
+        // });
+        // Create new entry at /user-scores/$userid/$scoreid and at
+        // /leaderboard/$scoreid simultaneously
+        string key = reference.Child("user-rank").Push().Key;
+        Dictionary<string, System.Object> entryValues = new Dictionary<string, System.Object>{
+            {"username", username},
+            {"score", score}
+        };
+
+        Dictionary<string, System.Object> childUpdates = new Dictionary<string, System.Object>();
+        childUpdates["/user-rank/" + key] = entryValues;
+
+        reference.UpdateChildrenAsync(childUpdates);
+        return key;
     }
 }
