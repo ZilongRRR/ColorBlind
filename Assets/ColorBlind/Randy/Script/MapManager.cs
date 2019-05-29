@@ -51,7 +51,6 @@ public class MapManager : Singleton<MapManager> {
     public List<Transform> allBlocks = new List<Transform> ();
     // 記錄現在正確的顏色
     public int currColor;
-    public int Combo = 0;
     [Header ("初始方塊設定")]
     public GameObject blockPrefab;
     public Vector3 initBlockPosition;
@@ -64,6 +63,8 @@ public class MapManager : Singleton<MapManager> {
     public Vector3 maxPosition;
     public Vector3 minPosition;
     public CameraManager cameraManager;
+    [Header ("方塊動態共用參數")]
+    public Material blockCenterMaterial;
 
     void Start () {
 
@@ -127,6 +128,16 @@ public class MapManager : Singleton<MapManager> {
         maxPosition.y = Mathf.Max (maxPosition.y, block.position.y);
         minPosition.x = Mathf.Min (minPosition.x, block.position.x);
         minPosition.y = Mathf.Min (minPosition.y, block.position.y);
+    }
+
+    public bool CheckColor (int color) {
+        if (color == currColor) {
+            GameFlowManager.Instance.ColorCorrect ();
+            return true;
+        } else {
+            GameFlowManager.Instance.ColorError ();
+            return false;
+        }
     }
 
     public void displayPath () {

@@ -55,15 +55,15 @@ public class Block : MonoBehaviour {
             blockIns.InitColor ();
             SetNeightborBlocks (index, blockIns);
         }
-
+        blockFeedback.BecomeCenter ();
         MapManager.Instance.NextStep (this);
     }
     public void InitColor () {
         // 跟 MapManager 取得隨機顏色的位置
         // 再從 MapManager 取得對應的顏色
-
         colorIndex = MapManager.Instance.GetRandomColorIndex ();
         this.GetComponent<MeshRenderer> ().material.color = MapManager.Instance.GetColorByIndex (colorIndex);
+        blockFeedback.Generate ();
     }
     private void OnMouseDown () {
         // unity 內建函數
@@ -72,17 +72,12 @@ public class Block : MonoBehaviour {
             foreach (Block b in MapManager.Instance.currCenterBlock.neightborBlocks) {
                 if (b == this && b != MapManager.Instance.currCenterBlock) {
                     // 確認點擊正確
-                    if (colorIndex == MapManager.Instance.currColor) {
+                    if (MapManager.Instance.CheckColor (colorIndex)) {
                         // 點選到正確的動態回饋
                         this.isClick = true;
-                        Color color = gameObject.GetComponent<MeshRenderer> ().material.color;
-                        color.a = 0f;
-                        gameObject.GetComponent<MeshRenderer> ().material.color = color;
                         MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
-                        // 判斷周圍是否還有可以點擊的位置
-
                         InitCenter ();
-                        // 周圍都沒有可點擊點
+                        // 判斷周圍是否還有可以點擊的位置
                         int clicked_num = 0;
                         foreach (Block tmp_b in this.neightborBlocks) {
                             if (tmp_b.isClick)
@@ -90,15 +85,14 @@ public class Block : MonoBehaviour {
                             else
                                 break;
                         }
+                        // 周圍都沒有可點擊點
                         if (clicked_num == 9) {
                             foreach (Transform tmp_go in MapManager.Instance.allBlocks) {
-                                if (tmp_go.GetComponent<Block> ().isClick == false) {
-                                    tmp_go.GetComponent<Block> ().isClick = true;
-                                    Color c = tmp_go.GetComponent<MeshRenderer> ().material.color;
-                                    c.a = 0f;
-                                    tmp_go.GetComponent<MeshRenderer> ().material.color = c;
-                                    MapManager.Instance.clicked_blocks.Add (new int[] { tmp_go.GetComponent<Block> ().cooord_x, tmp_go.GetComponent<Block> ().cooord_y });
-                                    tmp_go.GetComponent<Block> ().InitCenter ();
+                                Block block = tmp_go.GetComponent<Block> ();
+                                if (block.isClick == false) {
+                                    block.isClick = true;
+                                    MapManager.Instance.clicked_blocks.Add (new int[] { block.cooord_x, block.cooord_y });
+                                    block.InitCenter ();
                                 }
                             }
                         }
