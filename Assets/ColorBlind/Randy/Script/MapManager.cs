@@ -29,6 +29,7 @@ public class MapManager : Singleton<MapManager> {
         "財",
         "讚"
     };
+    public ColorData colorData;
     public Color[] colorArray = new Color[] {
         new Color (23f / 255f, 28f / 255f, 97f / 255f), new Color (3f / 255f, 110f / 255f, 184f / 255f),
         new Color (0f, 162f / 255f, 154f / 255f), new Color (34f / 255f, 172f / 255f, 56f / 255f),
@@ -68,7 +69,7 @@ public class MapManager : Singleton<MapManager> {
     public Material originMaterial;
 
     void Start () {
-
+        colorArray = colorData.colorChips;
         initBlockPosition = new Vector3 (camTrans.position.x, camTrans.position.y, 0);
         neightborVectors = new Vector3[9] {
             new Vector3 (0, 1 * distance * Mathf.Sqrt (2), 0),
@@ -143,7 +144,7 @@ public class MapManager : Singleton<MapManager> {
 
     public void displayPath () {
         foreach (Transform b in allBlocks) {
-            var mat = b.GetComponent<MeshRenderer>();
+            var mat = b.GetComponent<MeshRenderer> ();
             bool inPath = false;
             foreach (int[] array in clicked_blocks) {
                 if (b.GetComponent<Block> ().cooord_x == array[0] && b.GetComponent<Block> ().cooord_y == array[1]) {
@@ -154,7 +155,7 @@ public class MapManager : Singleton<MapManager> {
                 Color color = mat.material.color;
                 color.a = 1f;
                 mat.material = originMaterial;
-                mat.material.color = color;  
+                mat.material.color = color;
             } else {
                 Color color = mat.material.color;
                 color.a = 0f;
