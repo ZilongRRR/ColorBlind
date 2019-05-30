@@ -59,7 +59,7 @@ public class ExampleUse : MonoBehaviour
         {
             System.Random rnd = new System.Random();
             int random_score = rnd.Next(100, 2000);
-            Debug.Log(database.AddScoreToLeaders("Weiting", random_score));
+            Debug.Log(database.AddScoreToLeaders("Randy", random_score));
         }
     }
 }
