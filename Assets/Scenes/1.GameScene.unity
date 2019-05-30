@@ -815,7 +815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 71, y: -68}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &324688992
@@ -1129,7 +1129,7 @@ MonoBehaviour:
   neightborVectors: []
   allBlocks: []
   currColor: 0
-  blockPrefab: {fileID: 8979641764696266088, guid: 0b84e07f50ef34b1f90f65382a7c8cda,
+  blockPrefab: {fileID: 1830528935700808986, guid: 7551afcc3ce554a92b5ec0868e758600,
     type: 3}
   initBlockPosition: {x: 0, y: 0, z: 0}
   currCenterBlock: {fileID: 0}
