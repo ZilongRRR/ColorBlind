@@ -33,6 +33,7 @@ public class Block : MonoBehaviour {
         // 並且把對應的方塊指給每一個 neightborBlock
         // 更新 MapManager 的 currCenterBlock 為自己
         // 更新 MapManager 的 currColor
+        this.isClick = true;
         List<int> null_index = new List<int> ();
         foreach (KeyValuePair<int, int[]> item in MapManager.Instance.location_coord) {
             bool check = false;
@@ -74,7 +75,7 @@ public class Block : MonoBehaviour {
                     // 確認點擊正確
                     if (MapManager.Instance.CheckColor (colorIndex)) {
                         // 點選到正確的動態回饋
-                        this.isClick = true;
+                        
                         MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
                         InitCenter ();
                         // 判斷周圍是否還有可以點擊的位置
@@ -90,7 +91,6 @@ public class Block : MonoBehaviour {
                             foreach (Transform tmp_go in MapManager.Instance.allBlocks) {
                                 Block block = tmp_go.GetComponent<Block> ();
                                 if (block.isClick == false) {
-                                    block.isClick = true;
                                     MapManager.Instance.clicked_blocks.Add (new int[] { block.cooord_x, block.cooord_y });
                                     block.InitCenter ();
                                 }

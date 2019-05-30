@@ -65,6 +65,7 @@ public class MapManager : Singleton<MapManager> {
     public CameraManager cameraManager;
     [Header ("方塊動態共用參數")]
     public Material blockCenterMaterial;
+    public Material originMaterial;
 
     void Start () {
 
@@ -142,6 +143,7 @@ public class MapManager : Singleton<MapManager> {
 
     public void displayPath () {
         foreach (Transform b in allBlocks) {
+            var mat = b.GetComponent<MeshRenderer>();
             bool inPath = false;
             foreach (int[] array in clicked_blocks) {
                 if (b.GetComponent<Block> ().cooord_x == array[0] && b.GetComponent<Block> ().cooord_y == array[1]) {
@@ -149,13 +151,15 @@ public class MapManager : Singleton<MapManager> {
                 }
             }
             if (inPath) {
-                Color color = b.GetComponent<MeshRenderer> ().material.color;
+                Color color = mat.material.color;
                 color.a = 1f;
-                b.GetComponent<MeshRenderer> ().material.color = color;
+                mat.material = originMaterial;
+                mat.material.color = color;  
             } else {
-                Color color = b.GetComponent<MeshRenderer> ().material.color;
+                Color color = mat.material.color;
                 color.a = 0f;
-                b.GetComponent<MeshRenderer> ().material.color = color;
+                mat.material = blockCenterMaterial;
+                mat.material.color = color;
             }
         }
         cameraManager.DoLookAllOffset (maxPosition, minPosition, new Vector2 (1, 0.7f), new Vector2 (1, 1), 0.8f);
