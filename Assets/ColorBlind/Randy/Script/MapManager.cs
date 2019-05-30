@@ -67,8 +67,12 @@ public class MapManager : Singleton<MapManager> {
     [Header ("方塊動態共用參數")]
     public Material blockCenterMaterial;
     public Material originMaterial;
+    [Header("音效")]
+    public AudioSource source;
+    public AudioClip[] clips;
 
     void Start () {
+        source.Play(ulong.MaxValue);
         colorArray = colorData.colorChips;
         initBlockPosition = new Vector3 (camTrans.position.x, camTrans.position.y, 0);
         neightborVectors = new Vector3[9] {
@@ -96,6 +100,13 @@ public class MapManager : Singleton<MapManager> {
         }
         currCenterBlock.InitCenter ();
     }
+    void Update()
+    {
+        if (source.isPlaying == false)
+        {
+            source.clip = clips[3];
+        }
+    }
 
     public int GetRandomColorIndex () {
         return Random.Range (0, colorArray.Length);
@@ -105,6 +116,7 @@ public class MapManager : Singleton<MapManager> {
         return colorArray[index];
     }
     public void NextStep (Block nextBlock) {
+        source.Play();
         currCenterBlock = nextBlock;
         Vector3 newPos = new Vector3 (nextBlock.transform.position.x, nextBlock.transform.position.y, camTrans.position.z);
         camTrans.DOMove (newPos, camTranslateDuration);
