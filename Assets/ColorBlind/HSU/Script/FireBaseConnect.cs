@@ -7,83 +7,79 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine;
 
-public class FireBaseConnect
-{
-    public delegate void FireBaseConnectEvent(List<Rank> rank);
+public struct FirebaseStatus {
+    public static string NO_CONNECT = "未連線";
+    public static string CONNECTING = "讀取中";
+    public static string CONNECT_FINISH = "連線成功";
+    public static string CONNECT_FAILED = "連線失敗";
+    public static string DATA_READING = "資料讀取中";
+    public static string UPDATE_DATA = "資料更新";
+}
+
+public class FireBaseConnect {
+    public delegate void FireBaseConnectEvent (List<Rank> rank);
     public event FireBaseConnectEvent OnReadDataFinish = (e) => { };
     public event FireBaseConnectEvent OnReadDataFault = (e) => { };
 
-    public List<Rank> rankList = new List<Rank>();
+    public delegate void FireBaseStatusEvent (string status);
+    public event FireBaseStatusEvent OnShowStatus = (e) => { };
+
+    public List<Rank> rankList = new List<Rank> ();
     private DatabaseReference reference;
-    public FireBaseConnect(string domain_name = "ColorBlind")
-    {
-        // Set these values before calling into the realtime database.
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://colorblind-86332.firebaseio.com/");
-        // Get the root reference location of the database.
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-        Debug.Log("Connect Finish");
+
+    private bool isConnect = false;
+
+    public FireBaseConnect (string domain_name = "ColorBlind") {
+        ShowStatus (FirebaseStatus.CONNECTING);
+        try {
+            // Set these values before calling into the realtime database.
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://colorblind-86332.firebaseio.com/");
+            // Get the root reference location of the database.
+            reference = FirebaseDatabase.DefaultInstance.RootReference;
+            isConnect = true;
+            ShowStatus (FirebaseStatus.CONNECT_FINISH);
+        } catch (Exception e) {
+            ShowStatus (FirebaseStatus.CONNECT_FAILED);
+            Debug.Log (e);
+        }
     }
-    public void ReadData()
-    {
+    public void InitReadDataEvent () {
+        if (!isConnect) {
+            ShowStatus (FirebaseStatus.NO_CONNECT);
+            return;
+        }
+        ShowStatus (FirebaseStatus.DATA_READING);
         FirebaseDatabase.DefaultInstance
-            .GetReference("user-rank")
-            .OrderByChild("score").ValueChanged += HandleValueChanged;
-        // .GetValueAsync ().ContinueWith (task => {
-        //     if (task.IsFaulted) {
-        //         Debug.Log ("Error loading");
-        //         if (OnReadDataFault != null) {
-        //             OnReadDataFault (null);
-        //         }
-        //     } else if (task.IsCompleted) {
-        //         DataSnapshot snapshot = task.Result;
-        //         Debug.Log (snapshot.ChildrenCount);
-
-        //         foreach (var ds in snapshot.Children) {
-
-        //             Rank r = new Rank ();
-        //             r.username = ds.Key.Clone ().ToString ();
-        //             r.score = (ds.Value).ToString ().Clone ().ToString ();
-        //             rankList.Add (r);
-        //         }
-        //         // Do Unity stuff
-        //         if (OnReadDataFinish != null) {
-        //             OnReadDataFinish (rankList);
-        //         }
-        //     }
-        // }, TaskScheduler.FromCurrentSynchronizationContext ());
+            .GetReference ("user-rank")
+            .OrderByChild ("score").ValueChanged += HandleValueChanged;
     }
-    void HandleValueChanged(object sender, ValueChangedEventArgs args)
-    {
-        rankList = new List<Rank>();
-        if (args.DatabaseError != null)
-        {
-            Debug.LogError(args.DatabaseError.Message);
+    void HandleValueChanged (object sender, ValueChangedEventArgs args) {
+        rankList = new List<Rank> ();
+        if (args.DatabaseError != null) {
+            ShowStatus (FirebaseStatus.NO_CONNECT);
+            Debug.LogError (args.DatabaseError.Message);
             return;
         }
         // Do something with the data in args.Snapshot
         DataSnapshot snapshot = args.Snapshot;
-        Debug.Log(snapshot.ChildrenCount);
-
-        foreach (var users in snapshot.Children)
-        {
-            Rank r = new Rank();
-            foreach (var user_info in users.Children)
-            {
-                if (user_info.Key.ToString() == "username")
-                    r.username = (user_info.Value).ToString();
-                if (user_info.Key.ToString() == "score")
-                    r.score = (user_info.Value).ToString();
+        // Debug.Log (snapshot.ChildrenCount);
+        foreach (var users in snapshot.Children) {
+            Rank r = new Rank ();
+            foreach (var user_info in users.Children) {
+                if (user_info.Key.ToString () == "username")
+                    r.username = (user_info.Value).ToString ();
+                if (user_info.Key.ToString () == "score")
+                    r.score = (user_info.Value).ToString ();
             }
-            rankList.Add(r);
+            rankList.Add (r);
         }
+        ShowStatus (FirebaseStatus.UPDATE_DATA);
         // Do Unity stuff
-        if (OnReadDataFinish != null)
-        {
-            OnReadDataFinish(rankList);
+        if (OnReadDataFinish != null) {
+            OnReadDataFinish (rankList);
         }
     }
-    public string AddScoreToLeaders(string username, long score)
-    {
+    public string AddScoreToLeaders (string username, long score) {
         // // Update complex data that could be corrupted by concurrent updates.
         // reference.Child("user-rank").RunTransaction(mutableData =>
         // {
@@ -104,16 +100,21 @@ public class FireBaseConnect
         // });
         // Create new entry at /user-scores/$userid/$scoreid and at
         // /leaderboard/$scoreid simultaneously
-        string key = reference.Child("user-rank").Push().Key;
-        Dictionary<string, System.Object> entryValues = new Dictionary<string, System.Object>{
-            {"username", username},
-            {"score", score}
+        string key = reference.Child ("user-rank").Push ().Key;
+        Dictionary<string, System.Object> entryValues = new Dictionary<string, System.Object> { { "username", username },
+            { "score", score }
         };
 
-        Dictionary<string, System.Object> childUpdates = new Dictionary<string, System.Object>();
+        Dictionary<string, System.Object> childUpdates = new Dictionary<string, System.Object> ();
         childUpdates["/user-rank/" + key] = entryValues;
 
-        reference.UpdateChildrenAsync(childUpdates);
+        reference.UpdateChildrenAsync (childUpdates);
         return key;
+    }
+    private void ShowStatus (string status) {
+        if (OnShowStatus != null) {
+            OnShowStatus (status);
+        }
+        Debug.Log (status);
     }
 }
