@@ -9,6 +9,7 @@ public class RankEntity : MonoBehaviour
     public Text rankName;
 
     public Text rankScore;
+    public Image Background;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,10 @@ public class RankEntity : MonoBehaviour
         rankOrder.text = order.ToString();
         rankName.text = username;
         rankScore.text = userscore;
+    }
+    public void HighLight()
+    {
+        Background.color = new Color(1f, 0.2f, 0.6f);
     }
     // Update is called once per frame
     void Update()
