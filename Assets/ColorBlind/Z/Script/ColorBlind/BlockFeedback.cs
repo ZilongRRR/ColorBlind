@@ -17,6 +17,8 @@ public class BlockFeedback : MonoBehaviour {
     // 點擊正確的效果
     public void BecomeCenter () {
         InitSequence ();
+        // 音效
+        FastAudioManager.Instance.PlayOneShotEffect (0);
         // 修改成為可以變成透明的shader
         Color color = meshRenderer.material.color;
         meshRenderer.material = MapManager.Instance.blockCenterMaterial;
@@ -30,7 +32,10 @@ public class BlockFeedback : MonoBehaviour {
             });
     }
     // 點擊錯誤的效果
-    public void ClickError () { }
+    public void ClickError () {
+        // 音效
+        FastAudioManager.Instance.PlayOneShotEffect (1);
+    }
     // 初始動態
     private void InitSequence () {
         if (sequence != null) {

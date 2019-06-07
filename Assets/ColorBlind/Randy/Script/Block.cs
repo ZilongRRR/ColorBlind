@@ -56,6 +56,7 @@ public class Block : MonoBehaviour {
             blockIns.InitColor ();
             SetNeightborBlocks (index, blockIns);
         }
+        // 給予 feedback 跟告知相關系統
         blockFeedback.BecomeCenter ();
         MapManager.Instance.NextStep (this);
     }
@@ -75,7 +76,7 @@ public class Block : MonoBehaviour {
                     // 確認點擊正確
                     if (MapManager.Instance.CheckColor (colorIndex)) {
                         // 點選到正確的動態回饋
-                        
+
                         MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
                         InitCenter ();
                         // 判斷周圍是否還有可以點擊的位置
@@ -98,6 +99,7 @@ public class Block : MonoBehaviour {
                         }
                     } else {
                         // 點擊錯誤的動態
+                        blockFeedback.ClickError ();
                     }
                 }
             }
