@@ -22,7 +22,7 @@ public class RankEntity : MonoBehaviour
     }
     public void HighLight()
     {
-        Background.color = new Color(1f, 0.2f, 0.6f);
+        Background.gameObject.SetActive(true);
     }
     // Update is called once per frame
     void Update()

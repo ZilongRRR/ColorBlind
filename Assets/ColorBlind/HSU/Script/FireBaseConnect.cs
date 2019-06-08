@@ -127,7 +127,6 @@ public class FireBaseConnect
         Dictionary<string, System.Object> entryValues = new Dictionary<string, System.Object> { { "username", username },
             { "score", score }
         };
-
         Dictionary<string, System.Object> childUpdates = new Dictionary<string, System.Object>();
         childUpdates["/user-rank/" + key] = entryValues;
 

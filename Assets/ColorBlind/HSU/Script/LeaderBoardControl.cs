@@ -17,6 +17,7 @@ public class LeaderBoardControl : MonoBehaviour
     public Image finishFigure;
     public Image errorFigure;
     private List<string> user_record = new List<string>();
+    public GameObject current_rank;
     // Start is called before the first frame update
     public void InitLeaderBoard()
     {
@@ -72,7 +73,8 @@ public class LeaderBoardControl : MonoBehaviour
                 break;
             case FirebaseStatus.UPDATE_DATA:
                 Debug.Log("You are updating nerd");
-                statusText.text = status;
+                errorFigure.gameObject.SetActive(false);
+                statusText.text = "";
                 break;
         }
     }
@@ -103,6 +105,10 @@ public class LeaderBoardControl : MonoBehaviour
                 Debug.Log(r.key);
                 if (user_record.Contains(r.key))
                 {
+                    if (user_record[user_record.Count - 1] == r.key)
+                    {
+                        current_rank.GetComponent<RankEntity>().FillRankUIValue(i, r.username, r.score);
+                    }
                     rankObject.GetComponent<RankEntity>().HighLight();
                 }
             }
@@ -120,7 +126,7 @@ public class LeaderBoardControl : MonoBehaviour
         {
             System.Random rnd = new System.Random();
             int random_score = rnd.Next(100, 2000);
-            string database_key = database.AddScoreToLeaders("ABCD", random_score);
+            string database_key = database.AddScoreToLeaders("aaa", random_score);
             user_record.Add(database_key);
         }
         // if (Time.time - last_time > time_out)
