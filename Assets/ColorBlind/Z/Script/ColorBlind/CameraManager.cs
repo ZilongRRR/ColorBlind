@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         // if (Input.GetKeyDown (KeyCode.Q)) {
-        //     DoLookAllOffset (t1.transform.position, t2.transform.position, new Vector2 (1, 0.7f), new Vector2 (1, 1), 0.8f);
+        //     DoLookAllOffset (maxPosition, minPosition, new Vector2 (1, 0.7f), new Vector2 (1, 1), 0.8f);
         // }
         // if (Input.GetKeyDown (KeyCode.W)) {
         //     Debug.Log (sceneCamera.WorldToViewportPoint (t1.transform.position));

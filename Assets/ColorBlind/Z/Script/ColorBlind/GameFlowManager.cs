@@ -9,6 +9,8 @@ namespace ZTools {
         [Header ("UI")]
         public TextMeshProUGUI timeText;
         public TextMeshProUGUI scoreText;
+        public TextMeshProUGUI comboText;
+        public Animator pauseUIAnimator;
         [Header ("鏡頭")]
         public Transform cameraTr;
         public Vector3 preCameraPos;
@@ -20,13 +22,16 @@ namespace ZTools {
         public int score;
         public int combo = 0;
         public float comboDuration;
+        public float comboDurationMax = 5;
         [Header ("提示訊息")]
         public string defaultMessage = "請選擇跟字一樣顏色的方塊";
 
-        bool isCountDown = true;
+        bool isCountDown = false;
         void Start () {
             time = 99;
             preCameraPos = cameraTr.position;
+            CancelCombo ();
+            NotificationManager.Instance.DoNotification (defaultMessage);
         }
         void Update () {
             if (isCountDown) {
@@ -36,20 +41,38 @@ namespace ZTools {
                 } else {
                     GameTimeOut ();
                 }
+                // combo 延續的時間
+                if (comboDuration > 0) {
+                    comboDuration -= Time.deltaTime;
+                }
             }
         }
         public void ColorCorrect () {
-
+            // 如果第一次就把遊戲開始
+            if (!isCountDown) {
+                isCountDown = true;
+                NotificationManager.Instance.DoNotificationFade ();
+            }
+            // combo
+            combo++;
+            comboDuration = comboDurationMax;
+            comboText.text = combo.ToString () + " combo";
+            // 計分
         }
         public void ColorError () {
-            NotificationManager.Instance.DoNotificationAndFade (defaultMessage);
-            preCameraPos = cameraTr.position;
+            // 發送提示訊息
+            if (isCountDown) {
+                NotificationManager.Instance.DoNotificationAndFade (defaultMessage);
+            }
+            // 鏡頭震動
             cameraTr.DOPause ();
+            preCameraPos = cameraTr.position;
             cameraTr.DOShakePosition (shakeDuration, shakeStrength, shakeVibrato).OnPause (() => {
                 cameraTr.position = preCameraPos;
             }).OnComplete (() => {
                 cameraTr.position = preCameraPos;
             });
+            // combo 中斷
         }
         void GameTimeOut () {
             isCountDown = false;
@@ -60,8 +83,18 @@ namespace ZTools {
             int t = (int) time;
             timeText.text = t.ToString ();
         }
-        public void GameStart () {
-
+        void CancelCombo () {
+            combo = 0;
+            comboDuration = 0;
+            comboText.text = "";
+        }
+        public void GamePause () {
+            isCountDown = false;
+            pauseUIAnimator.Play ("In");
+        }
+        public void GameRestart () {
+            isCountDown = true;
+            pauseUIAnimator.Play ("Out");
         }
     }
 }

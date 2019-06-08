@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ZTools;
 
@@ -68,6 +69,10 @@ public class Block : MonoBehaviour {
         blockFeedback.Generate ();
     }
     private void OnMouseDown () {
+        // 如果點擊到 UI 就不會觸發點擊
+        if (EventSystem.current.IsPointerOverGameObject ()) {
+            return;
+        }
         // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
         if (!isClick) {
