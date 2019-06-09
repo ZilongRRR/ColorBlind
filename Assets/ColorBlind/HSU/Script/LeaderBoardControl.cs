@@ -118,7 +118,11 @@ public class LeaderBoardControl : MonoBehaviour
             }
         }
     }
-
+    public void UploadRecord(string usr_name, long score)
+    {
+        string database_key = database.AddScoreToLeaders(usr_name, score);
+        user_record.Add(database_key);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -126,8 +130,7 @@ public class LeaderBoardControl : MonoBehaviour
         {
             System.Random rnd = new System.Random();
             int random_score = rnd.Next(100, 2000);
-            string database_key = database.AddScoreToLeaders("aaa", random_score);
-            user_record.Add(database_key);
+            UploadRecord("bbb", random_score);
         }
         // if (Time.time - last_time > time_out)
         // {
