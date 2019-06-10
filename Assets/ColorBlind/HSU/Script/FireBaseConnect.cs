@@ -139,6 +139,6 @@ public class FireBaseConnect
         {
             OnShowStatus(status);
         }
-        Debug.Log(status);
+        // Debug.Log(status);
     }
 }
