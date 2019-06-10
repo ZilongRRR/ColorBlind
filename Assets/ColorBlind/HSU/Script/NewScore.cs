@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class NewScore : MonoBehaviour
-{
-    public GameObject leaderBoard;
+using ZTools;
+public class NewScore : MonoBehaviour {
+    public LeaderBoardControl leaderBoard;
+    public GameObject highlight;
     public InputField nameInput;
     public Button confirmBtn;
     public Button cancelBtn;
@@ -15,43 +15,38 @@ public class NewScore : MonoBehaviour
     public GameObject allObjects;
     public Sprite[] background = new Sprite[2];
     // Start is called before the first frame update
-    void Start()
-    {
-        confirmBtn.onClick.AddListener(ConfirmAction);
-        cancelBtn.onClick.AddListener(CancelAction);
+    void Start () {
+        confirmBtn.onClick.AddListener (ConfirmAction);
+        cancelBtn.onClick.AddListener (CancelAction);
+        restartBtn.onClick.AddListener (RestartAction);
     }
-    private void CancelAction()
-    {
-        leaderBoard.SetActive(true);
-        this.gameObject.SetActive(false);
+    private void RestartAction () {
+        SceneLoading.Instance.LoadScene ("1.GameScene");
     }
-    private void ConfirmAction()
-    {
+    private void CancelAction () {
+        SceneLoading.Instance.LoadScene ("0.TitleScene");
+    }
+    private void ConfirmAction () {
         string usr_name = nameInput.text;
-        long usr_score = System.Convert.ToInt64(valueText.text);
-        leaderBoard.SetActive(true);
-        leaderBoard.GetComponent<LeaderBoardControl>().UploadRecord(usr_name, usr_score);
-        this.gameObject.SetActive(false);
+        long usr_score = System.Convert.ToInt64 (valueText.text);
+        leaderBoard.UploadRecord (usr_name, usr_score);
     }
-    public void OpenScore(int score)
-    {
-        allObjects.SetActive(true);
+    public void OpenScore (int score) {
+        allObjects.SetActive (true);
         int maxScore = -1;
-        valueText.text = score.ToString();
-        if (PlayerPrefs.HasKey("MaxScore"))
-        {
-            maxScore = PlayerPrefs.GetInt("MaxScore");
+        valueText.text = score.ToString ();
+        if (PlayerPrefs.HasKey ("MaxScore")) {
+            maxScore = PlayerPrefs.GetInt ("MaxScore");
         }
-        if (score > maxScore)
-        {
-            valueText.text = score.ToString();
+        if (score > maxScore) {
+            highlight.SetActive (true);
+            valueText.text = score.ToString ();
             backgroundImage.sprite = background[0];
-            PlayerPrefs.SetInt("MaxScore", score);
-        }
-        else
-        {
+            PlayerPrefs.SetInt ("MaxScore", score);
+        } else {
+            highlight.SetActive (false);
             backgroundImage.sprite = background[1];
-            nameInput.gameObject.SetActive(false);
+            nameInput.gameObject.SetActive (false);
         }
         // 打開 UI 
     }

@@ -18,6 +18,7 @@ namespace ZTools {
         public float shakeStrength;
         public int shakeVibrato;
         [Header ("遊戲內參數")]
+        public float gameTime = 10;
         public float time;
         public float score = 0;
         public int combo = 0;
@@ -26,10 +27,11 @@ namespace ZTools {
         public bool isCombo = false;
         [Header ("提示訊息")]
         public string defaultMessage = "請選擇跟字一樣顏色的方塊";
+        public NewScore newScore;
 
         bool isCountDown = false;
         void Start () {
-            time = 99;
+            time = gameTime;
             preCameraPos = cameraTr.position;
             CancelCombo ();
             NotificationManager.Instance.DoNotification (defaultMessage);
@@ -101,6 +103,7 @@ namespace ZTools {
             isCountDown = false;
             time = 0;
             SetTimeText ();
+            newScore.OpenScore ((int) score);
         }
         void SetScoreText () {
             scoreText.text = ((int) score).ToString ();
