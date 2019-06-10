@@ -2294,7 +2294,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6c5d5143bbfb3440c89be955f2530164, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e5cdaf806a474ad48ed4a171147d7f7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2497,11 +2497,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d43cd2ce82f4f37b9434bb2798e39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeaderBoard: {fileID: 4399025048994188976}
-  NameInput: {fileID: 198719625}
-  Confirm: {fileID: 768207180}
-  Cancel: {fileID: 488974965}
-  Value: {fileID: 477772640}
+  leaderBoard: {fileID: 0}
+  nameInput: {fileID: 0}
+  confirmBtn: {fileID: 0}
+  cancelBtn: {fileID: 0}
+  valueText: {fileID: 0}
 --- !u!114 &1654009506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4527,11 +4527,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d43cd2ce82f4f37b9434bb2798e39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeaderBoard: {fileID: 4399025048994188976}
-  NameInput: {fileID: 348256122}
-  Confirm: {fileID: 998331151}
-  Cancel: {fileID: 1278350002}
-  Value: {fileID: 837488041}
+  leaderBoard: {fileID: 0}
+  nameInput: {fileID: 0}
+  confirmBtn: {fileID: 0}
+  cancelBtn: {fileID: 0}
+  valueText: {fileID: 0}
 --- !u!222 &8911540224842187985
 CanvasRenderer:
   m_ObjectHideFlags: 0
