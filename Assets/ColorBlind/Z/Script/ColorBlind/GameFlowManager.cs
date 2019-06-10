@@ -28,13 +28,14 @@ namespace ZTools {
         [Header ("提示訊息")]
         public string defaultMessage = "請選擇跟字一樣顏色的方塊";
         public NewScore newScore;
-
+        public controlAd ad;
         bool isCountDown = false;
         void Start () {
             time = gameTime;
             preCameraPos = cameraTr.position;
             CancelCombo ();
             NotificationManager.Instance.DoNotification (defaultMessage);
+            SetTimeText ();
             SetScoreText ();
             ComboReset ();
         }
@@ -75,7 +76,7 @@ namespace ZTools {
             comboDuration = comboDurationMax;
             comboText.text = combo.ToString () + " combo";
             // 計分
-            int c = combo / 10;
+            int c = combo * combo / 10;
             float ratio = ((float) c) / 10;
             score += 10 * (1 + ratio);
             SetScoreText ();
@@ -103,8 +104,15 @@ namespace ZTools {
             isCountDown = false;
             time = 0;
             SetTimeText ();
-            newScore.OpenScore ((int) score);
+            MapManager.Instance.displayPath ();
+            StartCoroutine (DelayUI ());
         }
+        IEnumerator DelayUI () {
+            yield return new WaitForSeconds (5);
+            newScore.OpenScore ((int) score);
+            ad.OpenAd ();
+        }
+
         void SetScoreText () {
             scoreText.text = ((int) score).ToString ();
         }

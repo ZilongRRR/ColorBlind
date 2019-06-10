@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 179453117550581408}
+  streamVideo: {fileID: 0}
   closeAdButton: {fileID: 179453116176759867}
 --- !u!1 &179453116470710492
 GameObject:
@@ -563,7 +564,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: cbf9a1afb37331743b4611ec8ca44c9b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fa31acecf8a74a06badbf9024a60c89, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -73,6 +73,12 @@ public class Block : MonoBehaviour {
         if (EventSystem.current.IsPointerOverGameObject ()) {
             return;
         }
+        if (EventSystem.current.IsPointerOverGameObject (1)) {
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject (2)) {
+            return;
+        }
         // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
         if (!isClick) {

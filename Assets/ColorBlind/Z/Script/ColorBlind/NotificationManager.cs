@@ -19,7 +19,7 @@ namespace ZTools {
         }
         public void DoNotificationFade () {
             notificationGroup.DOPause ();
-            notificationGroup.DOFade (0, 2);
+            notificationGroup.DOFade (0, 4);
         }
     }
 }

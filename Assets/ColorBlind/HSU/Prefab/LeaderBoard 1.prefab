@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -475, y: 725}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9002566951647686018
 CanvasRenderer:
@@ -549,7 +549,7 @@ RectTransform:
   - {fileID: 2254551746692116405}
   - {fileID: 893651312399657870}
   - {fileID: 2469590148234625922}
-  - {fileID: 5019087920215485563}
+  - {fileID: 5956179904008759576}
   - {fileID: 2254551745613285223}
   m_Father: {fileID: 2469590148044348174}
   m_RootOrder: 0
@@ -1010,7 +1010,7 @@ MonoBehaviour:
   loadingFigure: {fileID: 2254551745613285216}
   finishFigure: {fileID: 2254551746214811705}
   errorFigure: {fileID: 2254551746692116407}
-  current_rank: {fileID: 5721980224043051023}
+  current_rank: {fileID: 5956179904008759658}
   content: {fileID: 2453466582011961091}
   cancelBtn: {fileID: 8267770730828521381}
 --- !u!1 &2469590148083483538
@@ -1128,8 +1128,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2469590148035390443}
   m_HandleRect: {fileID: 2469590148035390441}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9998252
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1356,9 +1356,9 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 1
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 4
   m_Spacing: 50
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
@@ -1875,13 +1875,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50720db8d40694780a3cede2190dac2e, type: 3}
---- !u!1 &5721980224043051023 stripped
+--- !u!1 &5956179904008759658 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2143736109939966293, guid: 50720db8d40694780a3cede2190dac2e,
     type: 3}
   m_PrefabInstance: {fileID: 5956179904008759642}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &5019087920215485563 stripped
+--- !u!224 &5956179904008759576 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1661823657223570721, guid: 50720db8d40694780a3cede2190dac2e,
     type: 3}

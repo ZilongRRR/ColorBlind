@@ -25,5 +25,8 @@ namespace ZTools {
             yield return new WaitForSeconds (2);
             StartCoroutine (RandomTitleColor ());
         }
+        public void ClearAll () {
+            PlayerPrefs.DeleteAll ();
+        }
     }
 }

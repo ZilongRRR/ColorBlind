@@ -3,27 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class controlAd : MonoBehaviour
-{
+public class controlAd : MonoBehaviour {
     [SerializeField] GameObject content;
+    public float time = 5;
+    public StreamVideo streamVideo;
     public GameObject closeAdButton;
-    void Start()
-    {
-        closeAdButton.SetActive(false);
-        this.Invoke("activeButton", 15f);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void OpenAd () {
+        content.SetActive (true);
+        streamVideo.StartPlay ();
+        this.Invoke ("ActiveButton", time);
     }
-    public void closeAd()
-    {
-        content.SetActive(false);
+    public void CloseAd () {
+        streamVideo.StopViedo ();
+        content.SetActive (false);
     }
-    void activeButton()
-    {
-        closeAdButton.SetActive(true);
+    void ActiveButton () {
+        closeAdButton.SetActive (true);
     }
 }
