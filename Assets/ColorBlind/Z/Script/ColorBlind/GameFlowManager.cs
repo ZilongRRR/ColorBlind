@@ -33,6 +33,8 @@ namespace ZTools {
             preCameraPos = cameraTr.position;
             CancelCombo ();
             NotificationManager.Instance.DoNotification (defaultMessage);
+            SetScoreText ();
+            ComboReset ();
         }
         void Update () {
             if (isCountDown) {
@@ -57,7 +59,7 @@ namespace ZTools {
             isCombo = false;
             combo = 0;
             comboDuration = 0;
-            comboText.text = combo.ToString () + " combo";
+            comboText.text = "";
         }
         public void ColorCorrect () {
             // 如果第一次就把遊戲開始
@@ -74,7 +76,7 @@ namespace ZTools {
             int c = combo / 10;
             float ratio = ((float) c) / 10;
             score += 10 * (1 + ratio);
-            scoreText.text = ((int) score).ToString ();
+            SetScoreText ();
         }
         public void ColorError () {
             // 發送提示訊息
@@ -99,6 +101,9 @@ namespace ZTools {
             isCountDown = false;
             time = 0;
             SetTimeText ();
+        }
+        void SetScoreText () {
+            scoreText.text = ((int) score).ToString ();
         }
         void SetTimeText () {
             int t = (int) time;

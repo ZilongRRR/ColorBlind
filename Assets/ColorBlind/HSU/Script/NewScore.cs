@@ -3,38 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewScore : MonoBehaviour
-{
-    public GameObject LeaderBoard;
-    public InputField NameInput;
-    public Button Confirm;
-    public Button Cancel;
-    public Text Value;
+public class NewScore : MonoBehaviour {
+    public GameObject leaderBoard;
+    public InputField nameInput;
+    public Button confirmBtn;
+    public Button cancelBtn;
+    public Text valueText;
     // Start is called before the first frame update
-    void Start()
-    {
-        System.Random rnd = new System.Random();
-        int random_score = rnd.Next(100, 2000);
-        Value.text = random_score.ToString();
-        Confirm.onClick.AddListener(ConfirmAction);
-        Cancel.onClick.AddListener(CancelAction);
+    void Start () {
+        confirmBtn.onClick.AddListener (ConfirmAction);
+        cancelBtn.onClick.AddListener (CancelAction);
     }
-    private void CancelAction()
-    {
-        LeaderBoard.SetActive(true);
-        this.gameObject.SetActive(false);
+    private void CancelAction () {
+        leaderBoard.SetActive (true);
+        this.gameObject.SetActive (false);
     }
-    private void ConfirmAction()
-    {
-        string usr_name = NameInput.text;
-        long usr_score = System.Convert.ToInt64(Value.text);
-        LeaderBoard.SetActive(true);
-        LeaderBoard.GetComponent<LeaderBoardControl>().UploadRecord(usr_name, usr_score);
-        this.gameObject.SetActive(false);
+    private void ConfirmAction () {
+        string usr_name = nameInput.text;
+        long usr_score = System.Convert.ToInt64 (valueText.text);
+        leaderBoard.SetActive (true);
+        leaderBoard.GetComponent<LeaderBoardControl> ().UploadRecord (usr_name, usr_score);
+        this.gameObject.SetActive (false);
     }
-    // Update is called once per frame
-    void Update()
-    {
-
+    public void OpenScore (int score) {
+        valueText.text = score.ToString ();
+        // 打開 UI 
     }
 }
