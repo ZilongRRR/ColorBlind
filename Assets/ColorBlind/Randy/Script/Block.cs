@@ -57,9 +57,34 @@ public class Block : MonoBehaviour {
             blockIns.InitColor ();
             SetNeightborBlocks (index, blockIns);
         }
-        // 給予 feedback 跟告知相關系統
-        blockFeedback.BecomeCenter ();
-        MapManager.Instance.NextStep (this);
+
+        // 判斷周圍是否還有可以點擊的位置
+        int clicked_num = 0;
+        foreach (Block tmp_b in neightborBlocks)
+        {
+            if (tmp_b != null && tmp_b.isClick)
+                clicked_num++;
+        }
+
+        if (clicked_num == 9)
+        {
+            foreach (Transform tmp_go in MapManager.Instance.allBlocks)
+            {
+                Block block = tmp_go.GetComponent<Block>();
+                if (block.isClick == false)
+                {
+                    MapManager.Instance.clicked_blocks.Add(new int[] { block.cooord_x, block.cooord_y });
+                    block.InitCenter();
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // 給予 feedback 跟告知相關系統
+            blockFeedback.BecomeCenter();
+            MapManager.Instance.NextStep(this);
+        }
     }
     public void InitColor () {
         // 跟 MapManager 取得隨機顏色的位置
@@ -82,25 +107,8 @@ public class Block : MonoBehaviour {
                         // 點選到正確的動態回饋
 
                         MapManager.Instance.clicked_blocks.Add (new int[] { cooord_x, cooord_y });
-                        InitCenter ();
-                        // 判斷周圍是否還有可以點擊的位置
-                        int clicked_num = 0;
-                        foreach (Block tmp_b in this.neightborBlocks) {
-                            if (tmp_b.isClick)
-                                clicked_num++;
-                            else
-                                break;
-                        }
-                        // 周圍都沒有可點擊點
-                        if (clicked_num == 9) {
-                            foreach (Transform tmp_go in MapManager.Instance.allBlocks) {
-                                Block block = tmp_go.GetComponent<Block> ();
-                                if (block.isClick == false) {
-                                    MapManager.Instance.clicked_blocks.Add (new int[] { block.cooord_x, block.cooord_y });
-                                    block.InitCenter ();
-                                }
-                            }
-                        }
+                        InitCenter();
+
                     } else {
                         // 點擊錯誤的動態
                         blockFeedback.ClickError ();
