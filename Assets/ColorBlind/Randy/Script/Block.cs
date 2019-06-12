@@ -70,16 +70,9 @@ public class Block : MonoBehaviour {
     }
     private void OnMouseDown () {
         // 如果點擊到 UI 就不會觸發點擊
-        if (EventSystem.current.IsPointerOverGameObject ()) {
+        if (EventSystem.current.IsPointerOverGameObject () || EventSystem.current.IsPointerOverGameObject (1)) {
             return;
         }
-        if (EventSystem.current.IsPointerOverGameObject (1)) {
-            return;
-        }
-        if (EventSystem.current.IsPointerOverGameObject (2)) {
-            return;
-        }
-        // unity 內建函數
         // 跟 MapManager 比對顏色的位置是否ㄧ樣
         if (!isClick) {
             foreach (Block b in MapManager.Instance.currCenterBlock.neightborBlocks) {

@@ -3491,6 +3491,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ad
       objectReference: {fileID: 0}
+    - target: {fileID: 179453116268391625, guid: c477facc221e3814ab8dd650269e0aaa,
+        type: 3}
+      propertyPath: streamVideo
+      value: 
+      objectReference: {fileID: 2032849192}
+    - target: {fileID: 179453116268391625, guid: c477facc221e3814ab8dd650269e0aaa,
+        type: 3}
+      propertyPath: time
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 179453116268391638, guid: c477facc221e3814ab8dd650269e0aaa,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3601,16 +3611,6 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 179453116268391625, guid: c477facc221e3814ab8dd650269e0aaa,
-        type: 3}
-      propertyPath: streamVideo
-      value: 
-      objectReference: {fileID: 2032849192}
-    - target: {fileID: 179453116268391625, guid: c477facc221e3814ab8dd650269e0aaa,
-        type: 3}
-      propertyPath: time
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 179453117550581408, guid: c477facc221e3814ab8dd650269e0aaa,
         type: 3}
       propertyPath: m_IsActive
@@ -3632,6 +3632,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 32900000, guid: 58d23749402f54b9593bd5d137a0da2b,
         type: 3}
+    - target: {fileID: 179453116268391636, guid: c477facc221e3814ab8dd650269e0aaa,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c477facc221e3814ab8dd650269e0aaa, type: 3}
 --- !u!114 &2032849192 stripped

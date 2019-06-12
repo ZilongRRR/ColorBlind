@@ -12,13 +12,14 @@ public class controlAd : MonoBehaviour {
     public void OpenAd () {
         content.SetActive (true);
         streamVideo.StartPlay ();
-        this.Invoke ("ActiveButton", time);
+        StartCoroutine (ActiveButton ());
     }
     public void CloseAd () {
         streamVideo.StopViedo ();
         content.SetActive (false);
     }
-    void ActiveButton () {
+    IEnumerator ActiveButton () {
+        yield return new WaitForSeconds (time);
         closeAdButton.SetActive (true);
     }
 }

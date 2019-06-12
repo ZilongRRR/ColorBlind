@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &179453116176759866
 RectTransform:
   m_ObjectHideFlags: 0
@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 179453117550581408}
+  time: 5
   streamVideo: {fileID: 0}
   closeAdButton: {fileID: 179453116176759867}
 --- !u!1 &179453116470710492
