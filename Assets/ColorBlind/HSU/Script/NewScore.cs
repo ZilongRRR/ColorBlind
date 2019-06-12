@@ -10,6 +10,7 @@ public class NewScore : MonoBehaviour {
     public Button confirmBtn;
     public Button cancelBtn;
     public Button restartBtn;
+    public Button randomNameBtn;
     public Image backgroundImage;
     public Text valueText;
     public GameObject allObjects;
@@ -53,6 +54,7 @@ public class NewScore : MonoBehaviour {
             toShow = true;
             isPushed = false;
             highlight.SetActive (true);
+            randomNameBtn.gameObject.SetActive(true);
             valueText.text = score.ToString ();
             backgroundImage.sprite = background[0];
             PlayerPrefs.SetInt ("MaxScore", score);
@@ -60,6 +62,7 @@ public class NewScore : MonoBehaviour {
             highlight.SetActive (false);
             backgroundImage.sprite = background[1];
             nameInput.gameObject.SetActive (false);
+            randomNameBtn.gameObject.SetActive(false);
         }
         // 打開 UI 
     }
