@@ -1249,6 +1249,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u8ACB\u9078\u64C7\u8DDF\u5B57\u4E00\u6A23\u984F\u8272\u7684\u65B9\u584A"
+--- !u!114 &397465038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5947195940879485929, guid: 9cf3da41c8e04468b8fde3b784200039,
+    type: 3}
+  m_PrefabInstance: {fileID: 580391529}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &468752211
 GameObject:
   m_ObjectHideFlags: 0
@@ -1668,6 +1680,11 @@ PrefabInstance:
       propertyPath: leaderBoard
       value: 
       objectReference: {fileID: 2352517731641843092}
+    - target: {fileID: 6569172019229871781, guid: 9cf3da41c8e04468b8fde3b784200039,
+        type: 3}
+      propertyPath: randomNameBtn
+      value: 
+      objectReference: {fileID: 397465038}
     - target: {fileID: 6569172019629638615, guid: 9cf3da41c8e04468b8fde3b784200039,
         type: 3}
       propertyPath: m_IsActive
