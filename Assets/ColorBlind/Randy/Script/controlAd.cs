@@ -21,5 +21,7 @@ public class controlAd : MonoBehaviour {
     IEnumerator ActiveButton () {
         yield return new WaitForSeconds (time);
         closeAdButton.SetActive (true);
+        yield return new WaitForSeconds (5);
+        CloseAd ();
     }
 }
