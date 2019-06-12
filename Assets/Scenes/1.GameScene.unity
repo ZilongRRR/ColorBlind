@@ -2438,7 +2438,7 @@ MonoBehaviour:
   shakeDuration: 0.5
   shakeStrength: 0.5
   shakeVibrato: 20
-  gameTime: 300
+  gameTime: 30
   time: 0
   score: 0
   combo: 0
