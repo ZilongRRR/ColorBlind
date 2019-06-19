@@ -38,7 +38,6 @@ MapManager控管著現在的中心block(currCenterBlock)以及現在的文字顏
 ## Color
 ### 中文字
 |紅|橙|黃|綠|藍|靛|紫|橘|白|黑|灰|粉|棕|發|財|讚|
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 ### 顏色
 |r, g, b|
 |-------|
@@ -168,7 +167,7 @@ public string AddScoreToLeaders(string username, long score){
 
 }
 ```
-![](https://i.imgur.com/d46cfNw.png =500x750)
+![](https://i.imgur.com/d46cfNw.png)
 
 ### 提示顯示
 * 連線中
@@ -190,7 +189,7 @@ public string AddScoreToLeaders(string username, long score){
         以影片形式撥放，在撥放5秒後會有關閉鍵。
         ![](https://i.imgur.com/cFiprGW.png)
 * 展現走過的路徑
-    在遊戲結束時當下會呈現你走過的路徑來讓玩家看到自己擴展過的版圖。鏡頭計算方式於`CameraManager.cs`
+    在遊戲結束時當下會呈現你走過的路徑來讓玩家看到自己擴展過的版圖。鏡頭計算方式於`CameraManager.cs` <br>
     ![](https://i.imgur.com/kn4UIuz.gif)
 
 ## Game Scene
