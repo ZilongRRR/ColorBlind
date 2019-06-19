@@ -15,7 +15,7 @@ r06521609 趙君傑 <br>
 ![](https://i.imgur.com/Ri3FNdl.png)<br>
 #### 相對座標邏輯關係
 Blocks之間有相對座標的邏輯關係去掌握各個block的位置來創造neightborBlocks，以最初的block<b>(Genesis Block)</b>為(0,0)，0號為(-1,1)、1號為(0,1)...依此類推。
-```csharp=
+```csharp
 public Dictionary<int, int[]> location_coord = new Dictionary<int, int[]> { { 0, new int[] {-1, 1 } },
         { 1, new int[] { 0, 1 } },
         { 2, new int[] { 1, 1 } },
@@ -57,7 +57,7 @@ MapManager控管著現在的中心block(currCenterBlock)以及現在的文字顏
 
 ### 方塊相關
 MapManager.cs
-```csharp=
+```csharp
 public string[] colorTextArray;
 public Color[] colorArray;
 // 記錄現在正確的顏色
@@ -82,7 +82,7 @@ private void GetText(){
 ```
 
 Block.cs
-```csharp=
+```csharp
 // parameters
 private Block[] neightborBlocks = new Block[9];
 private bool isClick = false;
@@ -144,7 +144,7 @@ public void ColorError (){}
 
 ### 排行榜
 LeaderBoardControl.cs
-```csharp=
+```csharp
 private void HandelShowStatus(string status){}
 
 public void UpdateValue(List<Rank> rank){
@@ -152,7 +152,7 @@ public void UpdateValue(List<Rank> rank){
 }
 ```
 FireBaseConnect.cs
-```csharp=
+```csharp
 public delegate void FireBaseStatusEvent(string status);
 public event FireBaseStatusEvent OnShowStatus = (e) => { };
 // Connection to Firebase App
